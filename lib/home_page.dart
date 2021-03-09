@@ -12,7 +12,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   void _addNewTransaction(
-      String txTitle, double txAmount, DateTime selectedDate) {
+    String txTitle,
+    double txAmount,
+    DateTime selectedDate,
+  ) {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
@@ -47,27 +50,20 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<Transaction> get _recentTransactions {
-    return _transactions.where(
-      (tx) {
-        return tx.date.isAfter(
-          DateTime.now().subtract(
-            Duration(
-              days: 7,
-            ),
-          ),
-        );
-      },
-    ).toList();
+    return _transactions.where((tx) {
+      return tx.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
   }
 
   void _startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
-      context: ctx,
-      builder: (_) {
-        return NewTransaction(_addNewTransaction);
-      },
-    );
+        context: ctx,
+        builder: (_) {
+          return NewTransaction(_addNewTransaction);
+        });
   }
+
+  bool _showChart = false;
 
   @override
   Widget build(BuildContext context) {
@@ -90,13 +86,28 @@ class _HomePageState extends State<HomePage> {
       appBar: appBar,
       body: ListView(
         children: [
-          Container(
-            height: availableBodyHeight * 0.3,
-            child: Chart(_recentTransactions),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Show Chart'),
+              Switch(
+                onChanged: (bool value) {
+                  setState(() {
+                    _showChart = value;
+                  });
+                },
+                value: _showChart,
+              )
+            ],
           ),
-          Container(
-              height: availableBodyHeight * 0.7,
-              child: TransactionList(_transactions, _deleteTransaction)),
+          _showChart
+              ? Container(
+                  height: availableBodyHeight * 1,
+                  child: Chart(_recentTransactions),
+                )
+              : Container(
+                  height: availableBodyHeight * 0.7,
+                  child: TransactionList(_transactions, _deleteTransaction)),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
