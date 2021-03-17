@@ -1,10 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addNewTransaction;
+  final bool _isIOS;
 
-  NewTransaction(this.addNewTransaction);
+  NewTransaction(this.addNewTransaction, this._isIOS);
 
   @override
   _NewTransactionState createState() => _NewTransactionState();
@@ -53,7 +55,12 @@ class _NewTransactionState extends State<NewTransaction> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.only(
+        top: 8,
+        left: 8,
+        right: 8,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+      ),
       children: [
         TextField(
           decoration: InputDecoration(
@@ -80,10 +87,18 @@ class _NewTransactionState extends State<NewTransaction> {
                     ? 'No date selected!'
                     : 'Selected date: ${DateFormat('dd/MM/yyyy').format(_selectedDate)}',
               ),
-              TextButton(
-                child: Text('Select date'),
-                onPressed: _presentDatePicker,
-              )
+              widget._isIOS
+                  ? CupertinoButton(
+                      child: Text(
+                        'Select date',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: _presentDatePicker,
+                    )
+                  : TextButton(
+                      child: Text('Select date'),
+                      onPressed: _presentDatePicker,
+                    )
             ],
           ),
         ),

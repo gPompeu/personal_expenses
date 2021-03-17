@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'dart:io';
 // import 'package:flutter/services.dart';
 import 'home_page.dart';
 
@@ -12,11 +14,14 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  // final bool _isIOS = Platform.isIOS;
+  final bool _isIOS = true;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Personal Expenses',
-      home: HomePage(),
+      home: HomePage(_isIOS),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
