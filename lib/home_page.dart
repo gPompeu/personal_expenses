@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:io';
 
 import './models/transaction.dart';
 import './widgets/new_transaction.dart';
