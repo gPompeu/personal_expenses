@@ -74,6 +74,33 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  List<Widget> _buildLandscapeMode(
+    Widget chartSwitchContainer,
+    Function chartContainer,
+    Function transactionListContainer,
+  ) {
+    return [
+      chartSwitchContainer,
+      _showChart ? chartContainer(0.9) : transactionListContainer(0.9),
+    ];
+  }
+
+  List<Widget> _buildPortraitMode(
+    Function chartContainer,
+    Function transactionListContainer,
+  ) {
+    return [chartContainer(0.35), transactionListContainer(0.65)];
+  }
+
+  List<Widget> indentation() {
+    return [
+      Text('Sem indentação'),
+      Text(
+        'Com indentação',
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -121,11 +148,17 @@ class _HomePageState extends State<HomePage> {
     final Widget appBody = SafeArea(
       child: ListView(
         children: [
-          if (_isLandscape) chartSwitchContainer,
           if (_isLandscape)
-            _showChart ? chartContainer(0.9) : transactionListContainer(0.9),
-          if (!_isLandscape) chartContainer(0.35),
-          if (!_isLandscape) transactionListContainer(0.65),
+            ..._buildLandscapeMode(
+              chartSwitchContainer,
+              chartContainer,
+              transactionListContainer,
+            ),
+          if (!_isLandscape)
+            ..._buildPortraitMode(
+              chartContainer,
+              transactionListContainer,
+            ),
         ],
       ),
     );
